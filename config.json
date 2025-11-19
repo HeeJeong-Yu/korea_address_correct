@@ -1,0 +1,7 @@
+
+{
+    "paths": {
+        "correct_data": "./data/correct_data",
+        "col_mapping": "./data/col_mapping.json"
+    }
+}

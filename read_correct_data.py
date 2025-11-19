@@ -4,8 +4,8 @@ import os, json
 from utils import *
 
 class ReadCorrectData:
-    CORRECT_DATA_PATH = "./data/correct_data"  # 202510_도로명주소 한글_전체분 / 2025_상세주소 표시_전체분
-    COL_MAPPING_PATH = "./data/col_mapping.json"
+    CORRECT_DATA_PATH = get_config_data("path", "correct_data")
+    COL_MAPPING_PATH =  get_config_data("path", "col_mapping")
     ROADNAME_FILE_NAME = "도로명주소"
     DETAILED_FILE_NAME = "상세주소"
     ROADNAME_DEL_WORD = "jibun"   # 도로명주소 한글- jibun: 지번 주소
@@ -19,7 +19,7 @@ class ReadCorrectData:
         self.detailed_col = None
 
     # 컬럼명 찾기
-    def _load_column_mappings(self):
+    def load_column_mappings(self):
         data = load_json(self.CORRECT_DATA_PATH)
         roadname_col, detailed_col = data['roadname'], data['detailed']
 
@@ -63,7 +63,7 @@ class ReadCorrectData:
 
     # 메인
     def run(self):
-        self.roadname_col, self.detailed_col = self._load_column_mappings()
+        self.roadname_col, self.detailed_col = self.load_column_mappings()
         self._find_folder_path()
 
         roadname_filelist = self.find_filelist(self._roadname_path, self.ROADNAME_DEL_WORD)
@@ -71,6 +71,7 @@ class ReadCorrectData:
 
         roadname_df = self.read_data(self._roadname_path, roadname_filelist, self.roadname_col, self.ROADNAME_FILE_NAME)
         detailed_df = self.read_data(self._detailed_path, detailed_filelist, self.detailed_col, self.DETAILED_FILE_NAME)
+
 
 
 if __name__ == "__main__":
