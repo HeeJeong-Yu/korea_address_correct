@@ -51,15 +51,21 @@ class ReadCorrectData:
     
     # 데이터 파일 읽기
     def read_data(self, folder_path, filelist, col, data):
-        df = pd.DataFrame([])
+        df_list = []
 
         for filename in tqdm(filelist, desc=f"{data} 데이터 읽는 중"):
             file = os.path.join(folder_path, filename)
             new_df = pd.read_csv(file, encoding="cp949", sep="|", header=None, low_memory=False)
             new_df.rename(columns=col, inplace=True)
-            df = pd.concat([df, new_df])
+            df_list.append(new_df)
 
-        return df
+         # 4. 루프가 끝난 후, 리스트가 비어있지 않다면 단 한 번에 합칩니다.
+        if df_list:
+            df = pd.concat(df_list, ignore_index=True)
+            return df
+        
+        # 파일이 하나도 없을 경우 빈 DataFrame 반환
+        return pd.DataFrame()   
 
     # 메인
     def run(self):
