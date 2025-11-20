@@ -1,5 +1,5 @@
-import json
-import sys
+import json, sys, time, csv
+import pandas as pd
 
 _config_cache = None
 
@@ -9,8 +9,8 @@ def load_json(file_path):
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         return data
-    except Exception:
-        print(f"Json 파일 load 오류: {Exception}")
+    except Exception as e:
+        print(f"Json 파일 load 오류: {e}")
         sys.exit(1)
 
 # 설정 파일 
@@ -32,7 +32,23 @@ def get_config_data(category, word):
     try:
         data = config[category][word]
         return data
-    except Exception:
-        print(f"config 파일 읽기 오류: {Exception}")
+    except Exception as e:
+        print(f"config 파일 읽기 오류: {e}")
+        sys.exit(1)
+
+# csv 파일 읽기
+def read_csv(file):
+    try:
+        df = pd.read_csv(file, encoding="cp949", sep="|", header=None, low_memory=False, quoting=csv.QUOTE_NONE)
+        return df
+    except Exception as e:
+        print(f"csv파일 읽기 오류({file}): {e}")
         sys.exit(1)
     
+
+# 로그 출력
+def log(text, return_string=False):
+    now = time.strftime(r"%Y/%m/%d %H:%M:%S")
+    res = f"[{now}] {text}"
+    if not return_string: print(res, flush=True)
+    else: return res

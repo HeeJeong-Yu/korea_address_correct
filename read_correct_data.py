@@ -51,7 +51,7 @@ class ReadCorrectData:
 
         for filename in tqdm(filelist, desc=f"{data} 데이터 읽는 중"):
             file = os.path.join(self._folder_path, filename)
-            new_df = pd.read_csv(file, encoding="cp949", sep="|", header=None, low_memory=False)
+            new_df = read_csv(file)
             new_df.rename(columns=self.col, inplace=True)
             df_list.append(new_df)
 
