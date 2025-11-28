@@ -1,6 +1,13 @@
 from utils import *
 from read_correct_data import *
 import os
+import numpy as np
+
+def replace_to_nan(df):
+    df.replace(
+        to_replace=[0, False, None], 
+        value=np.nan,
+        inplace=True)
 
 def calculate_data(df):
     results = {}
@@ -37,6 +44,7 @@ def check_path():
 
 def get_correct_data_summary(roadname_df, detailed_df):
     file_path = check_path()
+    replace_to_nan(roadname_df); replace_to_nan(detailed_df)
 
     data_summary = []
     df_len = pd.DataFrame({"도로명주소 한글 인스턴스 건수" : [len(roadname_df)], 
